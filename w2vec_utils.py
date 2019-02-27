@@ -14,7 +14,7 @@ def find_most_similar(input_word, embedded_vec):
     """
     top_similar_words = []
     # TODO: your implementation here
-    
+
     # end of your implementation
     return top_similar_words
 
@@ -46,13 +46,14 @@ def train_word2vec(sentence_matrix, vocabulary_inv,
     4. Input params:
         sentence_matrix # int matrix: num_sentences x max_sentence_len
         vocabulary_inv  # dict {int: str}
-        num_features    # Word vector dimensionality                      
-        min_word_count  # Minimum word count                        
-        context         # Context window size 
+        num_features    # Word vector dimensionality
+        min_word_count  # Minimum word count
+        context         # Context window size
     """
     embedding_weights = {}
     embedding_model = None
     # TODO: your implementation here
-    
+    model = word2vec("sentences")
+
     # end of your implementation
     return embedding_model, embedding_weights

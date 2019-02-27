@@ -25,13 +25,16 @@ def get_ngrams_wid(arr_sentences, window_size=1):
     # TODO: Your implementation here
     i = 0
     for sentence in arr_sentences:
-        for index, word in enumerate(sentence.upper().split()):
-            print(word)
-            freq_dict.update({i:(word, sentence[index])})
+        words = sentence.upper().split()
+        for index, word in enumerate(words):
+            for x in range(1, window_size+1):
+                if index+x < len(words):
+                    freq_dict.setdefault((word, words[index+x]), 0)
+                    freq_dict[(word, words[index+x])] += 1
+                if index-x > -1:
+                    freq_dict.setdefault((word, words[index-x]), 0)
+                    freq_dict[(word, words[index-x])] += 1
 
-
-
-    #print(freq_dict)
     # End of implementation
     return freq_dict
 
@@ -68,19 +71,27 @@ def find_cooccurrencies(arr_sentences, window_size=1):
     """
     vocab_dict = {}
     X = []
-    arr_sentences = ["I like deep learning .", "I like nlp .", "I enjoy flying ."]
+    #arr_sentences = ["I like deep learning .", "I like nlp .", "I enjoy flying .", "I enjoy deep learning ."]
 
     # TODO: Your implementation here
     i = 0
     for sentence in arr_sentences:
         for word in sentence.upper().split():
-            if word not in vocab_dict:
+            if word not in vocab_dict.values():
                 vocab_dict.update({i:word})
                 i+=1
 
     freq_dict = get_ngrams_wid(arr_sentences, window_size)
+    for x in vocab_dict.values():
+        list = []
+        for y in vocab_dict.values():
+            if (x,y) in freq_dict.keys():
+                list.append(freq_dict.get((x,y)))
+            else:
+                list.append(0)
+        X.append(list)
 
 
-
+    #print(X)
     # End of implementation
-    return X, vocab_dict.keys()
+    return X, vocab_dict.values()
