@@ -1,11 +1,10 @@
 # Note: you're note allowed to import any other library.
 from __future__ import print_function
-from gensim.models import word2vec
+from gensim.models import Word2Vec
 from os.path import join, exists, split
 import os
 import numpy as np
 import multiprocessing
-
 
 def find_most_similar(input_word, embedded_vec):
     """
@@ -14,7 +13,7 @@ def find_most_similar(input_word, embedded_vec):
     """
     top_similar_words = []
     # TODO: your implementation here
-
+    top_similar_words = embedded_vec.most_similar(positive=input_word, topn=5)
     # end of your implementation
     return top_similar_words
 
@@ -32,8 +31,9 @@ def semantic_math_finder(w_start1, w_end1, w_end2, embedded_model):
     """
     w_start2 = ""
     #  TODO: your implementation here
-
+    w_start2 = embedded_model.most_similar_cosmul(positive=[w_end1, w_end2], negative=[w_start1], topn=1)
     # end of your implementation
+    print(w_start2)
     return w_start2
 
 
@@ -50,10 +50,20 @@ def train_word2vec(sentence_matrix, vocabulary_inv,
         min_word_count  # Minimum word count
         context         # Context window size
     """
-    embedding_weights = {}
-    embedding_model = None
+
     # TODO: your implementation here
-    model = word2vec("sentences")
+    embedding_model = None
+    embedding_weights = {}
+    sentences = []
+
+    for sentence in sentence_matrix:
+        list = []
+        for word in sentence:
+            list.append(vocabulary_inv.get(word))
+        sentences.append(list)
+
+    embedding_model = Word2Vec(sentences, size=num_features, window=context, min_count=min_word_count, workers=3)
+    embedding_model.train(sentences, total_examples=len(sentences), epochs=4)
 
     # end of your implementation
     return embedding_model, embedding_weights
