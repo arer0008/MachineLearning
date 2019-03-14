@@ -52,7 +52,7 @@ def train_word2vec(sentence_matrix, vocabulary_inv,
     """
 
     # TODO: your implementation here
-    embedding_model = None
+    embedding_model = Word2Vec.load("word2vec.model")
     embedding_weights = {}
     sentences = []
 
@@ -62,8 +62,13 @@ def train_word2vec(sentence_matrix, vocabulary_inv,
             list.append(vocabulary_inv.get(word))
         sentences.append(list)
 
-    embedding_model = Word2Vec(sentences, size=num_features, window=context, min_count=min_word_count, workers=3)
-    embedding_model.train(sentences, total_examples=len(sentences), epochs=4)
+
+
+    if embedding_model == None:
+        embedding_model = Word2Vec(sentences, size=num_features, window=context, min_count=min_word_count, workers=4)
+        embedding_model.save("word2vec.model")
+        embedding_model.train(sentences, total_examples=len(sentences), epochs=4)
+
 
     # end of your implementation
     return embedding_model, embedding_weights
